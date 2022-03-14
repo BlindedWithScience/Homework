@@ -83,3 +83,39 @@ def change_profile(data : dict, user_id : str, field : str, contents) -> bool:
 
             else:
                 return False
+
+
+def get_field(data : dict, field : str, user_id : str) -> str | None:
+    for item in data[field]:
+        if item["user_id"] == user_id:
+            return item
+
+    return None
+
+
+def get_user(data : dict, user_id : str) -> str | None:
+    return get_field(data, "users", user_id)
+   
+
+def get_profile(data : dict, user_id : str) -> str | None:
+    return get_field(data, "profiles", user_id)
+
+
+def display_user(data : dict, user_id : str):
+    user = get_user(data, user_id)
+
+    if user is None:
+        print("User does not exist")
+    
+    else:
+        print(f"user_id: {user_id} \nlogin: {user['login']}")
+
+
+def display_profile(data : dict, user_id : str):
+    profile = get_profile(data, user_id)
+
+    if profile is None:
+        print("User does not exist")
+    
+    else:
+        print(f"user_id: {user_id} \nprofile_id: {profile['profile_id']} \nlevel: {profile['level']}")
