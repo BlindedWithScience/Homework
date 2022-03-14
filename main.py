@@ -62,3 +62,24 @@ def login(data : dict, user_login : str, password : str) -> str | None:
 
     return None
 
+
+def change_profile(data : dict, user_id : str, field : str, contents) -> bool:
+    if field == "profile_id" or field == "user_id":
+        return False
+
+    for profile in data["profiles"]:
+        if profile["user_id"] == user_id and field in profile:
+
+            if type(profile[field]) is int:
+                try:
+                    contents = int(contents)
+                except:
+                    return False
+
+            if type(profile[field]) == type(contents):
+                profile[field] = contents
+                write_json(data) 
+                return True
+
+            else:
+                return False
