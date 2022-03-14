@@ -119,3 +119,81 @@ def display_profile(data : dict, user_id : str):
     
     else:
         print(f"user_id: {user_id} \nprofile_id: {profile['profile_id']} \nlevel: {profile['level']}")
+
+
+def main():
+    data = read_json()
+    while True:
+        resp = input("To register, enter 'r'.\nTo log in, enter 'l'.\nInput: ")
+        print()
+
+        if resp == "r":
+            while True:
+                print("Note: login and password must consist only of numbers and latin letters.")
+                user_login = input("Enter new login: ")
+                password = input("Enter new password: ")
+                
+                user_id = register(data, user_login, password)
+                
+                if user_id is None:
+                    print("Incorrect input or this login is in use. Please, try again.")
+                    print()
+                else:
+                    print("Success.")
+                    print()
+                    break
+            break
+
+        elif resp == "l":
+            while True:
+                user_login = input("Enter login: ")
+                password = input("Enter password: ")
+
+                user_id = login(data, user_login, password)
+
+                if user_id is None:
+                    print("Wrong login or password. Try again.")
+                    print()
+                else:
+                    print("Success.")
+                    print()
+                    break
+            break
+
+        else:
+            print("Wrong response. Try again.")
+
+    while True:
+        resp = input("To display userdata, enter 'u'.\nTo display profile, enter 'p'\n\
+To change profile field, enter 'c'.\nInput: ")
+
+        if resp == "u":
+            print()
+            display_user(data, user_id)
+            print()
+
+        elif resp == "p":
+            print()
+            display_profile(data, user_id)
+            print()
+
+        elif resp == "c":
+            print()
+            print("user_id and profile_id are unchangeable.")
+
+            field = input("Enter field name: ")
+            contents = input("Enter new value (if numeric, must consist only of numbers): ")
+
+            if change_profile(data, user_id, field, contents):
+                print("Success.")
+            else:
+                print("Error. Data remains unchanged.")
+            print()
+
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
