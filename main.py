@@ -2,7 +2,7 @@ import json
 import uuid
 
 
-def get_contents(filename : str) -> str:
+def get_contents(filename: str) -> str:
     try:
         with open(filename, "r") as file:
             data = file.read()
@@ -25,14 +25,14 @@ def write_json(contents) -> bool:
         return False
 
 
-def register(data : dict, user_login : str, password : str) -> str | None:
+def register(data: dict, user_login: str, password: str) -> str | None:
     if not (user_login.isalnum() and password.isalnum()):
         return None
 
     for user in data["users"]:
         if user["login"] == user_login:
             return None
-    
+
     user_id = str(uuid.uuid4())
     profile_id = str(uuid.uuid4())
     data["users"].append(
@@ -55,7 +55,7 @@ def register(data : dict, user_login : str, password : str) -> str | None:
     return user_id
 
 
-def login(data : dict, user_login : str, password : str) -> str | None:
+def login(data: dict, user_login: str, password: str) -> str | None:
     for user in data["users"]:
         if user["login"] == user_login and user["password"] == password:
             return user["user_id"]
@@ -63,7 +63,7 @@ def login(data : dict, user_login : str, password : str) -> str | None:
     return None
 
 
-def change_profile(data : dict, user_id : str, field : str, contents) -> bool:
+def change_profile(data: dict, user_id: str, field: str, contents) -> bool:
     if field == "profile_id" or field == "user_id":
         return False
 
@@ -73,19 +73,19 @@ def change_profile(data : dict, user_id : str, field : str, contents) -> bool:
             if type(profile[field]) is int:
                 try:
                     contents = int(contents)
-                except:
+                except Exception:
                     return False
 
             if type(profile[field]) == type(contents):
                 profile[field] = contents
-                write_json(data) 
+                write_json(data)
                 return True
 
             else:
                 return False
 
 
-def get_field(data : dict, field : str, user_id : str) -> str | None:
+def get_field(data: dict, field: str, user_id: str) -> str | None:
     for item in data[field]:
         if item["user_id"] == user_id:
             return item
@@ -93,32 +93,33 @@ def get_field(data : dict, field : str, user_id : str) -> str | None:
     return None
 
 
-def get_user(data : dict, user_id : str) -> str | None:
+def get_user(data: dict, user_id: str) -> str | None:
     return get_field(data, "users", user_id)
-   
 
-def get_profile(data : dict, user_id : str) -> str | None:
+
+def get_profile(data: dict, user_id: str) -> str | None:
     return get_field(data, "profiles", user_id)
 
 
-def display_user(data : dict, user_id : str):
+def display_user(data: dict, user_id: str):
     user = get_user(data, user_id)
 
     if user is None:
         print("User does not exist")
-    
+
     else:
         print(f"user_id: {user_id} \nlogin: {user['login']}")
 
 
-def display_profile(data : dict, user_id : str):
+def display_profile(data: dict, user_id: str):
     profile = get_profile(data, user_id)
 
     if profile is None:
         print("User does not exist")
-    
+
     else:
-        print(f"user_id: {user_id} \nprofile_id: {profile['profile_id']} \nlevel: {profile['level']}")
+        print(f"user_id: {user_id}\nprofile_id: {profile['profile_id']}\
+\nlevel: {profile['level']}")
 
 
 def main():
@@ -132,9 +133,9 @@ def main():
                 print("Note: login and password must consist only of numbers and latin letters.")
                 user_login = input("Enter new login: ")
                 password = input("Enter new password: ")
-                
+
                 user_id = register(data, user_login, password)
-                
+
                 if user_id is None:
                     print("Incorrect input or this login is in use. Please, try again.")
                     print()
@@ -191,9 +192,9 @@ To change profile field, enter 'c'.\nInput: ")
             print()
 
 
-
 if __name__ == "__main__":
     try:
         main()
+
     except KeyboardInterrupt:
         pass
